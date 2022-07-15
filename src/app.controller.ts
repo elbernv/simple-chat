@@ -8,6 +8,7 @@ import {
   UploadedFile,
   UseInterceptors,
   Response,
+  Query,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AppService } from './app.service';
@@ -25,8 +26,8 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get('check-if-user-has-profile')
-  checkIfUserHasProfile(@Req() request: any) {
-    return this.appService.checkIfUserHasProfile(request);
+  checkIfUserHasProfile(@Query('name') name: string) {
+    return this.appService.checkIfUserHasProfile(name);
   }
 
   @Post('create-profile')
@@ -47,8 +48,8 @@ export class AppController {
   }
 
   @Get('me-profile')
-  getMeProfile(@Req() request: any) {
-    return this.appService.getMeProfile(request);
+  getMeProfile(@Query('name') name: string) {
+    return this.appService.getMeProfile(name);
   }
 
   @Get('active-users')

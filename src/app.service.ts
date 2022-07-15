@@ -7,21 +7,22 @@ export const clients = {};
 
 @Injectable()
 export class AppService {
-  checkIfUserHasProfile(request: any) {
-    return Boolean(clients[request.ip]) ? clients[request.ip] : false;
+  checkIfUserHasProfile(name: string) {
+    return Boolean(clients[name]) ? clients[name] : false;
   }
 
   createProfile(body: any, file: Express.Multer.File, request: any) {
-    clients[request.ip] = {
+    clients[body.name] = {
       name: body.name,
-      image: `http://elbernv.site:3001/image/${file.filename}`,
+      image: `http://192.168.2.229:3001/image/${file.filename}`,
+      datetimesOfMessages: [],
     };
 
     return { message: 'ok bro' };
   }
 
-  getMeProfile(request: any) {
-    return clients[request.ip] || {};
+  getMeProfile(name: any) {
+    return clients[name] || {};
   }
 
   serveImage(name: string, response: any) {
