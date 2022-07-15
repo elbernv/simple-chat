@@ -24,58 +24,11 @@ export class ChatGateway implements OnGatewayDisconnect {
     this.server.emit('get-active-users', response);
   }
 
-  @SubscribeMessage('message')
-  handleMessage(client: Socket, message: string) {
-    let clientRemoteAddress =
-      client.conn.remoteAddress.split(':')[
-        client.conn.remoteAddress.split(':').length - 1
-      ];
-
-    if (clients[clientRemoteAddress]) {
-      ++clients[clientRemoteAddress].peticiones;
-      clients[clientRemoteAddress].datetimes.push(new Date().getTime());
-    } else {
-      clients[clientRemoteAddress] = {
-        peticiones: 1,
-        datetimes: [new Date().getTime()],
-      };
-    }
-
-    if (clients[clientRemoteAddress].peticiones === 5) {
-      const difference1 = differenceInMilliseconds(
-        clients[clientRemoteAddress].datetimes[4],
-        clients[clientRemoteAddress].datetimes[3],
-      );
-
-      const difference2 = differenceInMilliseconds(
-        clients[clientRemoteAddress].datetimes[3],
-        clients[clientRemoteAddress].datetimes[2],
-      );
-
-      const difference3 = differenceInMilliseconds(
-        clients[clientRemoteAddress].datetimes[2],
-        clients[clientRemoteAddress].datetimes[1],
-      );
-
-      const difference4 = differenceInMilliseconds(
-        clients[clientRemoteAddress].datetimes[1],
-        clients[clientRemoteAddress].datetimes[0],
-      );
-
-      console.log(difference1);
-      console.log(difference2);
-      console.log(difference3);
-      console.log(difference4);
-
-      clients[clientRemoteAddress].peticiones = 1;
-      clients[clientRemoteAddress].datetimes = [];
-    }
-
-    if (clientRemoteAddress === '192.168.2.230') {
-      return;
-    }
-
-    this.server.emit('message', message);
+  @SubscribeMessage('send-message')
+  handleMessage(client: Socket, messageBody: any) {
+    const clientIp = this.getClientRemoteAddress(client);
+    messageBody.image = clients[clientIp].image;
+    this.server.emit('receive-message', messageBody);
   }
 
   handleConnection(client: Socket, ...args: any[]) {

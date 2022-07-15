@@ -8,13 +8,13 @@ export const clients = {};
 @Injectable()
 export class AppService {
   checkIfUserHasProfile(request: any) {
-    return Boolean(clients[request.ip]);
+    return Boolean(clients[request.ip]) ? clients[request.ip] : false;
   }
 
   createProfile(body: any, file: Express.Multer.File, request: any) {
     clients[request.ip] = {
       name: body.name,
-      image: `http://192.168.2.229:3001/image/${file.filename}`,
+      image: `http://elbernv.site:3001/image/${file.filename}`,
     };
 
     return { message: 'ok bro' };
