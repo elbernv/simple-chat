@@ -6,7 +6,7 @@ import { AuthService } from '@auth/services/auth.service';
 import { AuthRepository } from '@auth/repositories/auth.repositories';
 import { LocalStrategy } from '@auth/strategies/local.strategy';
 import { JwtStrategy } from '@auth/strategies/jwt.strategy';
-import { JwtBaseGuard } from './guards/jwt-base.guard';
+import { JwtBaseGuard } from '@auth/guards/jwt-base.guard';
 
 @Module({
   imports: [JwtModule.register({})],

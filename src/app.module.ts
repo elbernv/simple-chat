@@ -5,8 +5,9 @@ import * as redisStore from 'cache-manager-redis-store';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
-import { AuthModule } from '@auth/auth.module';
 import { PrismaModule } from '@core/prisma/prisma.module';
+import { AuthModule } from '@auth/auth.module';
+import { UserModule } from '@user/user.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { PrismaModule } from '@core/prisma/prisma.module';
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     PrismaModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
