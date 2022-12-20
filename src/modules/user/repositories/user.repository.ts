@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 
 import { PrismaService } from '@core/prisma/services/prisma.service';
 import { CreateUserDto } from '@user/dtos/createUser.dto';
+import { UserStatus, UserTypes } from '@user/enums/user.enums';
 
 @Injectable()
 export class UserRepository {
@@ -12,6 +13,9 @@ export class UserRepository {
 
   public async createUser(body: CreateUserDto) {
     try {
+      const userType: number = UserTypes.STANDAR;
+      const userStatus: number = UserStatus.ACTIVE;
+
       return await this.prismaService.user.create({
         select: {
           id: true,
@@ -25,6 +29,8 @@ export class UserRepository {
           session: {
             create: { email: body.email, password: body.password },
           },
+          status: { connect: { id: userType } },
+          type: { connect: { id: userStatus } },
         },
       });
     } catch (error) {

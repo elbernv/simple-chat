@@ -22,6 +22,16 @@ async function main() {
       description: 'Usuario Baneado',
     },
   });
+
+  await prisma.user_type.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
+      id: 1,
+      name: 'Estándar',
+      description: 'Usuario Estándar',
+    },
+  });
 }
 
 main()

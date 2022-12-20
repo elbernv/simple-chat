@@ -34,9 +34,20 @@ model user {
 
   session   session @relation(fields: [sessionId], references: [id])
   sessionId BigInt  @unique
+
+  type   user_type @relation(fields: [typeId], references: [id])
+  typeId Int       @db.SmallInt
 }
 
 model user_status {
+  id          Int     @id @default(autoincrement()) @db.SmallInt
+  name        String  @db.VarChar(256)
+  description String? @db.VarChar(512)
+
+  users user[]
+}
+
+model user_type {
   id          Int     @id @default(autoincrement()) @db.SmallInt
   name        String  @db.VarChar(256)
   description String? @db.VarChar(512)
