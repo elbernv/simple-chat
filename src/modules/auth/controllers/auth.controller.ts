@@ -22,11 +22,12 @@ export class AuthController {
   @Post(ROUTES.AUTH_LOGIN)
   @UseGuards(LocalAuthGuard)
   public async login(@Request() req: any) {
-    return this.authService.generateToken(req.user);
+    return await this.authService.generateToken(req.user);
   }
 
+  @ApiBearerAuth()
   @Get(ROUTES.AUTH_VALIDATE)
-  public async validateSession() {
+  public validateSession() {
     return {
       status: 'VALID',
     };
@@ -35,6 +36,6 @@ export class AuthController {
   @ApiBearerAuth()
   @Delete(ROUTES.AUTH_LOGOUT)
   public async logout(@Request() req: any) {
-    return this.authService.logout(req.user);
+    return await this.authService.logout(req.user);
   }
 }
