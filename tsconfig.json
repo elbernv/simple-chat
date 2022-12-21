@@ -20,7 +20,8 @@
     "paths": {
       "@core/*": ["src/core/*"],
       "@auth/*": ["src/modules/auth/*"],
-      "@user/*": ["src/modules/user/*"]
+      "@user/*": ["src/modules/user/*"],
+      "@customer/*": ["src/modules/customer/*"]
     }
   }
 }

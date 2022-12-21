@@ -14,7 +14,7 @@ export class AuthService {
     public readonly jwtService: JwtService,
   ) {}
 
-  public async login(user: any) {
+  public async generateToken(user: any) {
     const signOptions: JwtSignOptions = {
       jwtid: nanoid(32),
       secret: this.configService.get('JWT_SECRET'),
@@ -34,7 +34,7 @@ export class AuthService {
     }
 
     return {
-      id: sessionInfo.user.id,
+      id: sessionInfo.id,
     };
   }
 }
