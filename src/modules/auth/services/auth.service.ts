@@ -25,12 +25,12 @@ export class AuthService {
     };
 
     return {
-      accessToken: this.jwtService.sign(user, signOptions),
+      access_token: this.jwtService.sign(user, signOptions),
     };
   }
 
-  public async validate(email: string, password: string) {
-    const sessionInfo = await this.authRepository.getSessionInfo(email);
+  public async validate(username: string, password: string) {
+    const sessionInfo = await this.authRepository.getSessionInfo(username);
 
     if (!sessionInfo || !compareSync(password, sessionInfo.password)) {
       return false;

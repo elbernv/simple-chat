@@ -6,7 +6,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { ROUTES } from '@core/enums/routes.enum';
 import { AuthService } from '@auth/services/auth.service';
@@ -32,6 +32,7 @@ export class AuthController {
     };
   }
 
+  @ApiBearerAuth()
   @Delete(ROUTES.AUTH_LOGOUT)
   public async logout(@Request() req: any) {
     return this.authService.logout(req.user);

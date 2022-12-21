@@ -5,6 +5,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ScopesObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
 
 function getConfiguration(configService: ConfigService): {
   port: string;
@@ -25,6 +26,18 @@ function getConfiguration(configService: ConfigService): {
 function configureOpenApi(app: NestExpressApplication): { url: string } {
   const openApiUrl = 'doc';
   const config = new DocumentBuilder()
+    .addBearerAuth({
+      flows: {
+        password: {
+          tokenUrl: 'http://localhost:7015/auth/login',
+          scopes: {},
+          authorizationUrl: 'http://localhost:7015/auth/login',
+        },
+      },
+      type: 'oauth2',
+      description:
+        'it is not necessary to send the client_id or the client_secret',
+    })
     .setTitle('Simple Chat')
     .setDescription('The Simple-Chat API description')
     .setVersion('0.1')

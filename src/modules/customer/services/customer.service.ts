@@ -14,7 +14,7 @@ export class CustomerService {
 
   public async createCustomer(body: CreateCustomerDto) {
     const newCustomer = await this.customerRepository.createCustomer(body);
-    const { accessToken } = await this.authService.generateToken({
+    const { access_token } = await this.authService.generateToken({
       id: newCustomer.session.id,
     });
 
@@ -26,7 +26,7 @@ export class CustomerService {
     return {
       message: 'Customer Created',
       url,
-      accessToken,
+      access_token,
     };
   }
 }
