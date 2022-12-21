@@ -1,4 +1,11 @@
-import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { ROUTES } from '@core/enums/routes.enum';
@@ -23,5 +30,10 @@ export class AuthController {
     return {
       status: 'VALID',
     };
+  }
+
+  @Delete(ROUTES.AUTH_LOGOUT)
+  public async logout(@Request() req: any) {
+    return this.authService.logout(req.user);
   }
 }
