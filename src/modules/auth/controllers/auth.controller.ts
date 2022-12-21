@@ -1,4 +1,4 @@
-import { Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { ROUTES } from '@core/enums/routes.enum';
@@ -12,9 +12,16 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Public()
-  @Post(ROUTES.LOGIN)
+  @Post(ROUTES.AUTH_LOGIN)
   @UseGuards(LocalAuthGuard)
   public async login(@Request() req: any) {
     return this.authService.generateToken(req.user);
+  }
+
+  @Get(ROUTES.AUTH_VALIDATE)
+  public async validateSession() {
+    return {
+      status: 'VALID',
+    };
   }
 }

@@ -1,7 +1,8 @@
 export enum ROUTES {
   SAY_HELLO = '/',
   AUTH = 'auth',
-  LOGIN = 'login',
+  AUTH_VALIDATE = 'validate',
+  AUTH_LOGIN = 'login',
   USER = 'users',
   CUSTOMER = 'customers',
 }
