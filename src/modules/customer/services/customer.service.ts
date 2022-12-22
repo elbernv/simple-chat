@@ -14,6 +14,7 @@ export class CustomerService {
 
   public async createCustomer(body: CreateCustomerDto) {
     const newCustomer = await this.customerRepository.createCustomer(body);
+    console.error(newCustomer);
     const { access_token } = await this.authService.generateToken({
       id: newCustomer.session.id,
     });

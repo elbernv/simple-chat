@@ -1,4 +1,3 @@
-import { TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 
@@ -12,12 +11,15 @@ describe('AuthController (e2e)', () => {
   let httpServer: any;
 
   beforeAll(async () => {
-    const moduleRef: TestingModule = await createModules();
+    app = await createModules();
+  });
 
-    app = moduleRef.createNestApplication();
-    await app.init();
-
+  beforeEach(async () => {
     httpServer = app.getHttpServer();
+  });
+
+  afterEach(async () => {
+    await httpServer.close();
   });
 
   let accessToken = null;
@@ -28,7 +30,7 @@ describe('AuthController (e2e)', () => {
       .send({ username: 'user@test.com', password: '12345678' })
       .expect(201)
       .expect((response) => {
-        expect(response.body).toMatchObject({
+        const result = expect(response.body).toMatchObject({
           access_token: expect.any(String),
         });
 
@@ -37,7 +39,7 @@ describe('AuthController (e2e)', () => {
   });
 
   it(`${ROUTES.AUTH}/${ROUTES.AUTH_LOGIN} - wrong credentials (POST)`, () => {
-    return request(httpServer)
+    return request(app.getHttpServer())
       .post(`/${ROUTES.AUTH}/${ROUTES.AUTH_LOGIN}`)
       .send({ username: 'wrong@email.com', password: 'wrongPassword' })
       .expect(401)
@@ -112,6 +114,5 @@ describe('AuthController (e2e)', () => {
 
   afterAll(async () => {
     await app.close();
-    await httpServer.close();
   });
 });

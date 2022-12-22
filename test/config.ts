@@ -3,6 +3,7 @@ import {
   DynamicModule,
   ForwardReference,
   Type,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
@@ -79,5 +80,14 @@ export async function createModules(
     ],
   }).compile();
 
-  return moduleRef;
+  const app = moduleRef.createNestApplication();
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  );
+
+  return app.init();
 }

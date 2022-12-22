@@ -24,6 +24,7 @@ export class CreateUserDto {
   email: string;
 
   @ApiProperty()
+  @IsString()
   @Transform(passwordValidation)
   password: string;
 

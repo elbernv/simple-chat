@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 
 import { PrismaService } from '@core/prisma/services/prisma.service';
 import { CreateCustomerDto } from '@customer/dtos/createCustomer.dto';
@@ -38,7 +43,11 @@ export class CustomerRepository {
         throw new BadRequestException('This email already exists');
       }
 
-      this.logger.warn(error);
+      this.logger.error(error);
+
+      throw new InternalServerErrorException(
+        'an error occurred creating the customer',
+      );
     }
   }
 }
