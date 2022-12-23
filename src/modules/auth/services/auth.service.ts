@@ -17,7 +17,9 @@ export class AuthService {
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
   ) {}
 
-  public async generateToken(tokenPayload: any) {
+  public async generateToken(tokenPayload: { id: bigint; typeId: number }) {
+    await this.authRepository.updateMetaData(tokenPayload.id);
+
     const signOptions: JwtSignOptions = {
       jwtid: nanoid(32),
       secret: this.configService.get('JWT_SECRET'),
