@@ -11,6 +11,7 @@ import { AuthModule } from '@auth/auth.module';
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 import { UserModule } from '@user/user.module';
 import { CustomerModule } from '@customer/customer.module';
+import { MeModule } from '@me/me.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { CustomerModule } from '@customer/customer.module';
     PrismaModule,
     UserModule,
     CustomerModule,
+    MeModule,
   ],
   controllers: [AppController],
   providers: [
