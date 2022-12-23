@@ -1,6 +1,7 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import { hashSync } from 'bcrypt';
 
+import { SessionTypes } from '../src/core/enums/sessionTypes.enum';
 import {
   CustomerStatus,
   CustomerTypes,
@@ -14,6 +15,26 @@ type PrismaType = PrismaClient<
 >;
 
 const prisma = new PrismaClient();
+
+async function sessionData(prisma: PrismaType) {
+  await prisma.session_type.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
+      id: 1,
+      name: 'user',
+    },
+  });
+
+  await prisma.session_type.upsert({
+    where: { id: 2 },
+    update: {},
+    create: {
+      id: 2,
+      name: 'customer',
+    },
+  });
+}
 
 async function usersData(prisma: PrismaType) {
   const password = hashSync('12345678', 10);
@@ -53,7 +74,11 @@ async function usersData(prisma: PrismaType) {
       name: 'user',
       lastName: 'test',
       session: {
-        create: { email: 'user@test.com', password },
+        create: {
+          email: 'user@test.com',
+          password,
+          type: { connect: { id: SessionTypes.USER } },
+        },
       },
       status: { connect: { id: UserTypes.STANDAR } },
       type: { connect: { id: UserStatus.ACTIVE } },
@@ -99,7 +124,11 @@ async function customersData(prisma: PrismaType) {
       name: 'customer',
       lastName: 'test',
       session: {
-        create: { email: 'customer@test.com', password },
+        create: {
+          email: 'customer@test.com',
+          password,
+          type: { connect: { id: SessionTypes.CUSTOMER } },
+        },
       },
       status: { connect: { id: CustomerTypes.STANDAR } },
       type: { connect: { id: CustomerStatus.ACTIVE } },
@@ -108,6 +137,7 @@ async function customersData(prisma: PrismaType) {
 }
 
 async function main() {
+  await sessionData(prisma);
   await usersData(prisma);
   await customersData(prisma);
 }

@@ -6,4 +6,5 @@ export enum ROUTES {
   AUTH_LOGOUT = 'logout',
   USER = 'users',
   CUSTOMER = 'customers',
+  ME = 'me',
 }

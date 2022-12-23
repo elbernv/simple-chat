@@ -5,6 +5,7 @@ import {
   Logger,
 } from '@nestjs/common';
 
+import { SessionTypes } from '@core/enums/sessionTypes.enum';
 import { PrismaService } from '@core/prisma/services/prisma.service';
 import { CreateCustomerDto } from '@customer/dtos/createCustomer.dto';
 import { CustomerStatus, CustomerTypes } from '@customer/enums/customer.enums';
@@ -26,13 +27,17 @@ export class CustomerRepository {
           id: true,
           name: true,
           lastName: true,
-          session: { select: { id: true, email: true } },
+          session: { select: { id: true, email: true, typeId: true } },
         },
         data: {
           name: body.name,
           ...(body.lastName && { lastName: body.lastName }),
           session: {
-            create: { email: body.email, password: body.password },
+            create: {
+              email: body.email,
+              password: body.password,
+              type: { connect: { id: SessionTypes.CUSTOMER } },
+            },
           },
           status: { connect: { id: customerType } },
           type: { connect: { id: customerStatus } },

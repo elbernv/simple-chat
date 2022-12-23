@@ -17,7 +17,7 @@ export class AuthService {
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
   ) {}
 
-  public async generateToken(user: any) {
+  public async generateToken(tokenPayload: any) {
     const signOptions: JwtSignOptions = {
       jwtid: nanoid(32),
       secret: this.configService.get('JWT_SECRET'),
@@ -25,7 +25,7 @@ export class AuthService {
     };
 
     return {
-      access_token: this.jwtService.sign(user, signOptions),
+      access_token: this.jwtService.sign(tokenPayload, signOptions),
     };
   }
 
@@ -38,6 +38,7 @@ export class AuthService {
 
     return {
       id: sessionInfo.id,
+      type: sessionInfo.typeId,
     };
   }
 

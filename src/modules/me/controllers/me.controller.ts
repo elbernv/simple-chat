@@ -1,4 +1,14 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 
-@Controller('me')
-export class MeController {}
+import { ROUTES } from '@core/enums/routes.enum';
+import { MeService } from '@me/services/me.service';
+
+@Controller(ROUTES.ME)
+export class MeController {
+  constructor(private readonly meService: MeService) {}
+
+  @Get()
+  public async getMyInfo() {
+    return await this.meService.getMyInfo();
+  }
+}

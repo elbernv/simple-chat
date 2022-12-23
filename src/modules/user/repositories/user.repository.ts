@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 
+import { SessionTypes } from '@core/enums/sessionTypes.enum';
 import { PrismaService } from '@core/prisma/services/prisma.service';
 import { CreateUserDto } from '@user/dtos/createUser.dto';
 import { UserStatus, UserTypes } from '@user/enums/user.enums';
@@ -21,13 +22,17 @@ export class UserRepository {
           id: true,
           name: true,
           lastName: true,
-          session: { select: { email: true } },
+          session: { select: { id: true, email: true, typeId: true } },
         },
         data: {
           name: body.name,
           ...(body.lastName && { lastName: body.lastName }),
           session: {
-            create: { email: body.email, password: body.password },
+            create: {
+              email: body.email,
+              password: body.password,
+              type: { connect: { id: SessionTypes.USER } },
+            },
           },
           status: { connect: { id: userType } },
           type: { connect: { id: userStatus } },

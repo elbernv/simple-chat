@@ -13,7 +13,7 @@ export class AuthRepository {
         id: true,
         email: true,
         password: true,
-        user: true,
+        typeId: true,
       },
     });
 

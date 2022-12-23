@@ -19,6 +19,16 @@ model session {
 
   user     user?
   customer customer?
+
+  type   session_type @relation(fields: [typeId], references: [id])
+  typeId Int          @db.SmallInt
+}
+
+model session_type {
+  id   Int    @id @default(autoincrement()) @db.SmallInt
+  name String @db.VarChar(256)
+
+  session session[]
 }
 
 model user {
