@@ -21,7 +21,7 @@ describe('CustomerController (e2e)', () => {
 
   let accessToken = null;
 
-  it(`${ROUTES.CUSTOMER} - wrong data for customer create (POST)`, () => {
+  it(`/${ROUTES.CUSTOMER} - wrong data for customer create (POST)`, () => {
     return Promise.all([
       request(httpServer)
         .post(`/${ROUTES.CUSTOMER}`)

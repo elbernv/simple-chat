@@ -10,6 +10,7 @@
     "^@core/(.*)$": "<rootDir>/../src/core/$1",
     "^@auth/(.*)$": "<rootDir>/../src/modules/auth/$1",
     "^@user/(.*)$": "<rootDir>/../src/modules/user/$1",
-    "^@customer/(.*)$": "<rootDir>/../src/modules/customer/$1"
+    "^@customer/(.*)$": "<rootDir>/../src/modules/customer/$1",
+    "^@me/(.*)$": "<rootDir>/../src/modules/me/$1"
   }
 }

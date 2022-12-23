@@ -24,7 +24,7 @@ describe('AuthController (e2e)', () => {
 
   let accessToken = null;
 
-  it(`${ROUTES.AUTH}/${ROUTES.AUTH_LOGIN} - successfull user login (POST)`, () => {
+  it(`/${ROUTES.AUTH}/${ROUTES.AUTH_LOGIN} - successfull user login (POST)`, () => {
     return request(httpServer)
       .post(`/${ROUTES.AUTH}/${ROUTES.AUTH_LOGIN}`)
       .send({ username: 'user@test.com', password: '12345678' })
@@ -38,7 +38,7 @@ describe('AuthController (e2e)', () => {
       });
   });
 
-  it(`${ROUTES.AUTH}/${ROUTES.AUTH_LOGIN} - wrong credentials (POST)`, () => {
+  it(`/${ROUTES.AUTH}/${ROUTES.AUTH_LOGIN} - wrong credentials (POST)`, () => {
     return request(app.getHttpServer())
       .post(`/${ROUTES.AUTH}/${ROUTES.AUTH_LOGIN}`)
       .send({ username: 'wrong@email.com', password: 'wrongPassword' })
@@ -51,7 +51,7 @@ describe('AuthController (e2e)', () => {
       });
   });
 
-  it(`${ROUTES.AUTH}/${ROUTES.AUTH_VALIDATE} - validate session without token (POST)`, () => {
+  it(`/${ROUTES.AUTH}/${ROUTES.AUTH_VALIDATE} - validate session without token (POST)`, () => {
     return request(httpServer)
       .get(`/${ROUTES.AUTH}/${ROUTES.AUTH_VALIDATE}`)
       .expect(401)
@@ -63,7 +63,7 @@ describe('AuthController (e2e)', () => {
       });
   });
 
-  it(`${ROUTES.AUTH}/${ROUTES.AUTH_VALIDATE} - validate session valid token (GET)`, () => {
+  it(`/${ROUTES.AUTH}/${ROUTES.AUTH_VALIDATE} - validate session valid token (GET)`, () => {
     return request(httpServer)
       .get(`/${ROUTES.AUTH}/${ROUTES.AUTH_VALIDATE}`)
       .set('Authorization', `Bearer ${accessToken}`)
@@ -75,7 +75,7 @@ describe('AuthController (e2e)', () => {
       });
   });
 
-  it(`${ROUTES.AUTH}/${ROUTES.AUTH_LOGOUT} - logout without token (DELETE)`, () => {
+  it(`/${ROUTES.AUTH}/${ROUTES.AUTH_LOGOUT} - logout without token (DELETE)`, () => {
     return request(httpServer)
       .delete(`/${ROUTES.AUTH}/${ROUTES.AUTH_LOGOUT}`)
       .expect(401)
@@ -87,7 +87,7 @@ describe('AuthController (e2e)', () => {
       });
   });
 
-  it(`${ROUTES.AUTH}/${ROUTES.AUTH_LOGOUT} - logout with valid token (DELETE)`, () => {
+  it(`/${ROUTES.AUTH}/${ROUTES.AUTH_LOGOUT} - logout with valid token (DELETE)`, () => {
     return request(httpServer)
       .delete(`/${ROUTES.AUTH}/${ROUTES.AUTH_LOGOUT}`)
       .expect(200)
@@ -99,7 +99,7 @@ describe('AuthController (e2e)', () => {
       });
   });
 
-  it(`${ROUTES.AUTH}/${ROUTES.AUTH_LOGOUT} - logout with revoked token (DELETE)`, () => {
+  it(`/${ROUTES.AUTH}/${ROUTES.AUTH_LOGOUT} - logout with revoked token (DELETE)`, () => {
     return request(httpServer)
       .delete(`/${ROUTES.AUTH}/${ROUTES.AUTH_LOGOUT}`)
       .expect(401)
