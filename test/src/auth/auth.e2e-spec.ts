@@ -28,7 +28,7 @@ describe('AuthController (e2e)', () => {
     return request(httpServer)
       .post(`/${ROUTES.AUTH}/${ROUTES.AUTH_LOGIN}`)
       .send({ username: 'user@test.com', password: '12345678' })
-      .expect(201)
+      .expect(200)
       .expect((response) => {
         const result = expect(response.body).toMatchObject({
           access_token: expect.any(String),

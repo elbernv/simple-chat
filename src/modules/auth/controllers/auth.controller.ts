@@ -2,6 +2,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Post,
   Request,
   UseGuards,
@@ -20,6 +21,7 @@ export class AuthController {
 
   @Public()
   @Post(ROUTES.AUTH_LOGIN)
+  @HttpCode(200)
   @UseGuards(LocalAuthGuard)
   public async login(@Request() req: any) {
     return await this.authService.generateToken(req.user);
