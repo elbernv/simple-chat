@@ -1,6 +1,12 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsEmail, IsOptional, IsString, minLength } from 'class-validator';
+import {
+  IsEmail,
+  IsOptional,
+  IsString,
+  MinLength,
+  minLength,
+} from 'class-validator';
 import { hashSync } from 'bcrypt';
 import { BadRequestException } from '@nestjs/common';
 
@@ -17,6 +23,7 @@ const passwordValidation = ({ value }) => {
 export class CreateUserDto {
   @ApiProperty()
   @IsString()
+  @MinLength(3)
   name: string;
 
   @ApiProperty()
