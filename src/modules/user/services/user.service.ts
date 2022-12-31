@@ -14,10 +14,11 @@ export class UserService {
 
   public async createUser(body: CreateUserDto) {
     const newUser = await this.userRepository.createUser(body);
-    const { access_token } = await this.authService.generateToken({
-      id: newUser.session.id,
-      typeId: newUser.session.typeId,
-    });
+    const { access_token, refresh_token } =
+      await this.authService.generateAccessToken({
+        id: newUser.session.id,
+        typeId: newUser.session.typeId,
+      });
 
     const url = this.userRepository.buildUrl(newUser.id, ROUTES.USER);
 
@@ -25,6 +26,7 @@ export class UserService {
       message: 'User created',
       url,
       access_token,
+      refresh_token,
     };
   }
 }

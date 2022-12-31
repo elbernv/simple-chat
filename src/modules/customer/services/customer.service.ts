@@ -14,10 +14,11 @@ export class CustomerService {
 
   public async createCustomer(body: CreateCustomerDto) {
     const newCustomer = await this.customerRepository.createCustomer(body);
-    const { access_token } = await this.authService.generateToken({
-      id: newCustomer.session.id,
-      typeId: newCustomer.session.typeId,
-    });
+    const { access_token, refresh_token } =
+      await this.authService.generateAccessToken({
+        id: newCustomer.session.id,
+        typeId: newCustomer.session.typeId,
+      });
 
     const url = this.customerRepository.buildUrl(
       newCustomer.id,
@@ -28,6 +29,7 @@ export class CustomerService {
       message: 'Customer Created',
       url,
       access_token,
+      refresh_token,
     };
   }
 }

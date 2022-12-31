@@ -7,6 +7,7 @@ import { AuthRepository } from '@auth/repositories/auth.repositories';
 import { LocalStrategy } from '@auth/strategies/local.strategy';
 import { JwtStrategy } from '@auth/strategies/jwt.strategy';
 import { JwtBaseGuard } from '@auth/guards/jwt-base.guard';
+import { JwtRefreshStrategy } from '@auth/strategies/jwt-refresh.strategy';
 
 @Module({
   imports: [JwtModule.register({})],
@@ -16,6 +17,7 @@ import { JwtBaseGuard } from '@auth/guards/jwt-base.guard';
     AuthRepository,
     LocalStrategy,
     JwtStrategy,
+    JwtRefreshStrategy,
     JwtBaseGuard,
   ],
   exports: [AuthService, JwtBaseGuard],

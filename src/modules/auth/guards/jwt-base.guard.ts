@@ -35,15 +35,13 @@ export class JwtBaseGuard {
 
   public async tokenIsRevoked(context: ExecutionContext): Promise<boolean> {
     const contextArgs: any = context.getArgs();
-    let access_token = '';
-
     const authorizationHeader = contextArgs[0].headers?.authorization;
 
     if (!authorizationHeader) {
       return true;
     }
 
-    access_token = authorizationHeader.split(' ')?.[1];
+    const access_token = authorizationHeader.split(' ')?.[1];
 
     if (!access_token) {
       return true;
@@ -58,7 +56,7 @@ export class JwtBaseGuard {
     return false;
   }
 
-  private async tokenInBlacklist(accessToken: string): Promise<boolean> {
+  public async tokenInBlacklist(accessToken: string): Promise<boolean> {
     const decodeToken: any = this.authService.jwtService.decode(accessToken);
 
     if (!decodeToken) {

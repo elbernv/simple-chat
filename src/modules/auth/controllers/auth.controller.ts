@@ -6,13 +6,20 @@ import {
   Post,
   Request,
   UseGuards,
+  Headers,
+  Body,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 
 import { ROUTES } from '@core/enums/routes.enum';
+import { SessionInfo } from '@core/decorators/sessionInfo.decorator';
+import { SessionInfoType } from '@core/types/sessionInfo.type';
 import { AuthService } from '@auth/services/auth.service';
 import { LocalAuthGuard } from '@auth/guards/local-auth-guard';
 import { Public } from '@auth/decorators/public.decorator';
+import { JwtRefreshGuard } from '@auth/guards/jwt-refresh.guard';
+import { LoginDto } from '@auth/dtos/login.dto';
+import { RefreshTokenDto } from '@auth/dtos/refresh-token.dto';
 
 @ApiTags(ROUTES.AUTH.toUpperCase())
 @Controller(ROUTES.AUTH)
@@ -23,13 +30,14 @@ export class AuthController {
   @Post(ROUTES.AUTH_LOGIN)
   @HttpCode(200)
   @UseGuards(LocalAuthGuard)
-  public async login(@Request() req: any) {
-    return await this.authService.generateToken(req.user);
+  public async login(@Request() req: any, @Body() body: LoginDto) {
+    return await this.authService.generateAccessToken(req.user);
   }
 
   @ApiBearerAuth()
   @Get(ROUTES.AUTH_VALIDATE)
-  public validateSession() {
+  public validateSession(@SessionInfo() sessionInfo: SessionInfoType) {
+    console.log(sessionInfo);
     return {
       status: 'VALID',
     };
@@ -37,7 +45,18 @@ export class AuthController {
 
   @ApiBearerAuth()
   @Delete(ROUTES.AUTH_LOGOUT)
-  public async logout(@Request() req: any) {
-    return await this.authService.logout(req.user);
+  public async logout(@SessionInfo() sessionInfo: SessionInfoType) {
+    return await this.authService.logout(sessionInfo);
+  }
+
+  @Public()
+  @UseGuards(JwtRefreshGuard)
+  @HttpCode(200)
+  @Post('refresh')
+  public async refreshToken(
+    @SessionInfo() sessionInfo: SessionInfoType,
+    @Body() body: RefreshTokenDto,
+  ) {
+    return this.authService.refreshToken(sessionInfo, body.access_token);
   }
 }

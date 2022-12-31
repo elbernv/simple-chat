@@ -1,11 +1,17 @@
 import { compareSync } from 'bcrypt';
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  CACHE_MANAGER,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { nanoid } from 'nanoid';
 import { Cache } from 'cache-manager';
 import { differenceInSeconds } from 'date-fns';
 
+import { SessionInfoType } from '@core/types/sessionInfo.type';
 import { AuthRepository } from '@auth/repositories/auth.repositories';
 
 @Injectable()
@@ -17,18 +23,40 @@ export class AuthService {
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
   ) {}
 
-  public async generateToken(tokenPayload: { id: bigint; typeId: number }) {
+  public async generateAccessToken(tokenPayload: {
+    id: bigint | number;
+    typeId: number;
+  }) {
+    const accessTokenJwtid = nanoid(32);
+    const accessTokenSignOptions: JwtSignOptions = {
+      jwtid: accessTokenJwtid,
+      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+      expiresIn: this.configService.get('JWT_ACCESS_TOKEN_LIFE'),
+    };
+    const access_token = this.jwtService.sign(
+      tokenPayload,
+      accessTokenSignOptions,
+    );
+    const refresh_token = this.generateRefreshAcessToken(accessTokenJwtid);
+
     await this.authRepository.updateMetaData(tokenPayload.id);
 
-    const signOptions: JwtSignOptions = {
-      jwtid: nanoid(32),
-      secret: this.configService.get('JWT_SECRET'),
-      expiresIn: '8h',
-    };
+    return { access_token, refresh_token };
+  }
 
-    return {
-      access_token: this.jwtService.sign(tokenPayload, signOptions),
+  private generateRefreshAcessToken(accessTokenJwtid: string) {
+    const refreshTokenJwtid = nanoid(32);
+    const refreshTokenSignOptions: JwtSignOptions = {
+      jwtid: refreshTokenJwtid,
+      secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
+      expiresIn: this.configService.get('JWT_REFRESH_TOKEN_LIFE'),
     };
+    const refresh_token = this.jwtService.sign(
+      { atjwtid: accessTokenJwtid },
+      refreshTokenSignOptions,
+    );
+
+    return refresh_token;
   }
 
   public async validate(username: string, password: string) {
@@ -44,20 +72,49 @@ export class AuthService {
     };
   }
 
-  public async logout(tokenInfo: any) {
+  public async logout(tokenInfo: SessionInfoType) {
     await this.addTokenToBlackList(tokenInfo);
 
     return { message: 'session closed successfully' };
   }
 
-  private async addTokenToBlackList(tokenInfo: any) {
+  private async addTokenToBlackList(tokenInfo: SessionInfoType) {
     const jti = tokenInfo.jti;
     const now = Date.now();
     const exp = tokenInfo.exp * 1000;
     const ttl = differenceInSeconds(exp, now);
 
+    if (1 > ttl) {
+      return true;
+    }
+
     await this.cacheManager.set(jti, jti, ttl);
 
     return true;
+  }
+
+  public async refreshToken(
+    refreshTokenInfo: SessionInfoType,
+    access_token: string,
+  ) {
+    const accessTokenInfo: SessionInfoType = this.jwtService.verify(
+      access_token,
+      {
+        secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+        ignoreExpiration: true,
+      },
+    );
+
+    if (refreshTokenInfo.atjwtid !== accessTokenInfo.jti) {
+      throw new BadRequestException();
+    }
+
+    await this.addTokenToBlackList(refreshTokenInfo);
+    await this.addTokenToBlackList(accessTokenInfo);
+
+    return await this.generateAccessToken({
+      id: accessTokenInfo.id,
+      typeId: accessTokenInfo.type,
+    });
   }
 }

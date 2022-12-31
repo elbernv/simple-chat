@@ -20,7 +20,7 @@ export class AuthRepository {
     return sessionInfo;
   }
 
-  public async updateMetaData(sessionId: bigint) {
+  public async updateMetaData(sessionId: bigint | number) {
     await this.prismaService.session.update({
       where: { id: sessionId },
       data: { timesLoggedIn: { increment: 1 }, lastAccess: new Date() },
