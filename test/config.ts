@@ -85,7 +85,11 @@ export async function createModules(
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
-      transformOptions: { enableImplicitConversion: true },
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+      forbidNonWhitelisted: true,
+      whitelist: true,
     }),
   );
 
