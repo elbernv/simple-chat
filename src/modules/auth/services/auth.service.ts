@@ -9,7 +9,7 @@ import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { nanoid } from 'nanoid';
 import { Cache } from 'cache-manager';
-import { differenceInSeconds } from 'date-fns';
+import { differenceInMinutes, differenceInSeconds } from 'date-fns';
 
 import { SessionInfoType } from '@core/types/sessionInfo.type';
 import { AuthRepository } from '@auth/repositories/auth.repositories';
@@ -97,24 +97,40 @@ export class AuthService {
     refreshTokenInfo: SessionInfoType,
     access_token: string,
   ) {
-    const accessTokenInfo: SessionInfoType = this.jwtService.verify(
-      access_token,
-      {
-        secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
-        ignoreExpiration: true,
-      },
-    );
+    try {
+      const accessTokenInfo: SessionInfoType = this.jwtService.verify(
+        access_token,
+        {
+          secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+          ignoreExpiration: true,
+        },
+      );
 
-    if (refreshTokenInfo.atjwtid !== accessTokenInfo.jti) {
+      if (refreshTokenInfo.atjwtid !== accessTokenInfo.jti) {
+        throw new BadRequestException();
+      }
+
+      await this.addTokenToBlackList(refreshTokenInfo);
+      await this.addTokenToBlackList(accessTokenInfo);
+
+      return await this.generateAccessToken({
+        id: accessTokenInfo.id,
+        typeId: accessTokenInfo.type,
+      });
+    } catch (error) {
       throw new BadRequestException();
     }
+  }
 
-    await this.addTokenToBlackList(refreshTokenInfo);
-    await this.addTokenToBlackList(accessTokenInfo);
+  public async isValidSession(sessionInfo: SessionInfoType) {
+    const expirationInMinutes = differenceInMinutes(
+      sessionInfo.exp * 1000,
+      Date.now(),
+    );
 
-    return await this.generateAccessToken({
-      id: accessTokenInfo.id,
-      typeId: accessTokenInfo.type,
-    });
+    return {
+      status: 'VALID',
+      expirationInMinutes,
+    };
   }
 }

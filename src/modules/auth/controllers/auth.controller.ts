@@ -6,7 +6,6 @@ import {
   Post,
   Request,
   UseGuards,
-  Headers,
   Body,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
@@ -36,11 +35,8 @@ export class AuthController {
 
   @ApiBearerAuth()
   @Get(ROUTES.AUTH_VALIDATE)
-  public validateSession(@SessionInfo() sessionInfo: SessionInfoType) {
-    console.log(sessionInfo);
-    return {
-      status: 'VALID',
-    };
+  public isValidSession(@SessionInfo() sessionInfo: SessionInfoType) {
+    return this.authService.isValidSession(sessionInfo);
   }
 
   @ApiBearerAuth()
@@ -52,7 +48,7 @@ export class AuthController {
   @Public()
   @UseGuards(JwtRefreshGuard)
   @HttpCode(200)
-  @Post('refresh')
+  @Post(ROUTES.AUTH_REFRESH)
   public async refreshToken(
     @SessionInfo() sessionInfo: SessionInfoType,
     @Body() body: RefreshTokenDto,

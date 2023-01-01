@@ -28,9 +28,10 @@ describe('CustomerController (e2e)', () => {
         .send({})
         .expect(400)
         .expect((response) => {
-          expect(response.body).toMatchObject({
+          expect(response.body).toEqual({
             statusCode: 400,
             message: [
+              'name must be longer than or equal to 3 characters',
               'name must be a string',
               'email must be an email',
               'password must be a string',
@@ -43,7 +44,7 @@ describe('CustomerController (e2e)', () => {
         .send({ name: minifaker.firstName() })
         .expect(400)
         .expect((response) => {
-          expect(response.body).toMatchObject({
+          expect(response.body).toEqual({
             statusCode: 400,
             message: ['email must be an email', 'password must be a string'],
             error: 'Bad Request',
@@ -54,7 +55,7 @@ describe('CustomerController (e2e)', () => {
         .send({ name: minifaker.firstName(), email: minifaker.email() })
         .expect(400)
         .expect((response) => {
-          expect(response.body).toMatchObject({
+          expect(response.body).toEqual({
             statusCode: 400,
             message: ['password must be a string'],
             error: 'Bad Request',
@@ -69,7 +70,7 @@ describe('CustomerController (e2e)', () => {
         })
         .expect(400)
         .expect((response) => {
-          expect(response.body).toMatchObject({
+          expect(response.body).toEqual({
             statusCode: 400,
             message: ['password must be longer than or equal to 8 characters'],
             error: 'Bad Request',

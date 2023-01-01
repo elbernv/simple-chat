@@ -25,7 +25,7 @@ describe('MeController (e2e)', () => {
       .send({ username: 'user@test.com', password: '12345678' })
       .expect(200)
       .expect((response) => {
-        expect(response.body).toMatchObject({
+        expect(response.body).toEqual({
           access_token: expect.any(String),
         });
 
@@ -39,7 +39,7 @@ describe('MeController (e2e)', () => {
       .send({ username: 'customer@test.com', password: '12345678' })
       .expect(200)
       .expect((response) => {
-        expect(response.body).toMatchObject({
+        expect(response.body).toEqual({
           access_token: expect.any(String),
         });
 
@@ -53,7 +53,7 @@ describe('MeController (e2e)', () => {
       .set('Authorization', `Bearer ${customerAccessToken}`)
       .expect(200)
       .expect((response) => {
-        return expect(response.body).toMatchObject({
+        return expect(response.body).toEqual({
           id: expect.any(Number),
           name: expect.any(String),
           lastName: expect.any(String),
@@ -78,7 +78,7 @@ describe('MeController (e2e)', () => {
       .set('Authorization', `Bearer ${userAccessToken}`)
       .expect(200)
       .expect((response) => {
-        return expect(response.body).toMatchObject({
+        return expect(response.body).toEqual({
           id: expect.any(Number),
           name: expect.any(String),
           lastName: expect.any(String),
