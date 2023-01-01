@@ -27,9 +27,12 @@ describe('MeController (e2e)', () => {
       .expect((response) => {
         expect(response.body).toEqual({
           access_token: expect.any(String),
+          refresh_token: expect.any(String),
         });
-
+      })
+      .ok((response) => {
         userAccessToken = response.body.access_token;
+        return true;
       });
   });
 
@@ -41,9 +44,12 @@ describe('MeController (e2e)', () => {
       .expect((response) => {
         expect(response.body).toEqual({
           access_token: expect.any(String),
+          refresh_token: expect.any(String),
         });
-
+      })
+      .ok((response) => {
         customerAccessToken = response.body.access_token;
+        return true;
       });
   });
 
