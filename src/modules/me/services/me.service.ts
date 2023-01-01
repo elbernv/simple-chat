@@ -2,8 +2,8 @@ import { Prisma } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
 
 import { SessionInfoType } from '@core/types/sessionInfo.type';
-import { MeRepository } from '@me/repositories/me.repository';
 import { SessionTypes } from '@core/enums/sessionTypes.enum';
+import { MeRepository } from '@me/repositories/me.repository';
 
 @Injectable()
 export class MeService {

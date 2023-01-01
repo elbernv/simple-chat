@@ -8,7 +8,7 @@ import {
   UseGuards,
   Body,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { ROUTES } from '@core/enums/routes.enum';
 import { SessionInfo } from '@core/decorators/sessionInfo.decorator';
