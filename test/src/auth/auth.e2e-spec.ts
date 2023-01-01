@@ -36,6 +36,7 @@ describe('AuthController (e2e)', () => {
         expect(response.body).toEqual({
           access_token: expect.any(String),
           refresh_token: expect.any(String),
+          expirationInSeconds: expect.any(Number),
         });
       })
       .ok((response) => {
@@ -54,6 +55,7 @@ describe('AuthController (e2e)', () => {
         expect(response.body).toEqual({
           access_token: expect.any(String),
           refresh_token: expect.any(String),
+          expirationInSeconds: expect.any(Number),
         });
       })
       .ok((response) => {
@@ -96,7 +98,7 @@ describe('AuthController (e2e)', () => {
       .expect((response) => {
         expect(response.body).toEqual({
           status: 'VALID',
-          expirationInMinutes: expect.any(Number),
+          expirationInSeconds: expect.any(Number),
         });
       });
   });
@@ -202,6 +204,7 @@ describe('AuthController (e2e)', () => {
         expect(response.body).toEqual({
           access_token: expect.any(String),
           refresh_token: expect.any(String),
+          expirationInSeconds: expect.any(Number),
         });
       });
   });

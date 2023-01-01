@@ -9,7 +9,7 @@ import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { nanoid } from 'nanoid';
 import { Cache } from 'cache-manager';
-import { differenceInMinutes, differenceInSeconds } from 'date-fns';
+import { differenceInSeconds } from 'date-fns';
 
 import { SessionInfoType } from '@core/types/sessionInfo.type';
 import { AuthRepository } from '@auth/repositories/auth.repositories';
@@ -41,7 +41,13 @@ export class AuthService {
 
     await this.authRepository.updateMetaData(tokenPayload.id);
 
-    return { access_token, refresh_token };
+    return {
+      access_token,
+      refresh_token,
+      expirationInSeconds: parseInt(
+        this.configService.get('JWT_ACCESS_TOKEN_LIFE'),
+      ),
+    };
   }
 
   private generateRefreshAcessToken(accessTokenJwtid: string) {
@@ -123,14 +129,14 @@ export class AuthService {
   }
 
   public async isValidSession(sessionInfo: SessionInfoType) {
-    const expirationInMinutes = differenceInMinutes(
+    const expirationInSeconds = differenceInSeconds(
       sessionInfo.exp * 1000,
       Date.now(),
     );
 
     return {
       status: 'VALID',
-      expirationInMinutes,
+      expirationInSeconds,
     };
   }
 }
