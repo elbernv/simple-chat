@@ -5,6 +5,7 @@ import { ROUTES } from '@core/enums/routes.enum';
 import { AuthService } from '@auth/services/auth.service';
 import { CreateCustomerDto } from '@customer/dtos/createCustomer.dto';
 import { CustomerRepository } from '@customer/respositories/customer.repository';
+import { UpdateCustomerDto } from '@customer/dtos/updateCustomer.dto';
 
 @Injectable()
 export class CustomerService {
@@ -32,6 +33,18 @@ export class CustomerService {
       access_token,
       refresh_token,
       expirationInSeconds,
+    };
+  }
+
+  public async updateCustomer(id: number, body: UpdateCustomerDto) {
+    const updatedCustomer = await this.customerRepository.updateCustomer(
+      id,
+      body,
+    );
+
+    return {
+      message: 'Customer Updated',
+      ...updatedCustomer,
     };
   }
 }

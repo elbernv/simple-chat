@@ -20,6 +20,7 @@ describe('CustomerController (e2e)', () => {
   });
 
   let accessToken = null;
+  let customerCreatedId = null;
 
   it(`/${ROUTES.CUSTOMER} - wrong data for customer create (POST)`, () => {
     return Promise.all([
@@ -95,6 +96,44 @@ describe('CustomerController (e2e)', () => {
           access_token: expect.any(String),
           refresh_token: expect.any(String),
           expirationInSeconds: expect.any(Number),
+        });
+      })
+      .ok((response) => {
+        accessToken = response.body.access_token;
+        customerCreatedId =
+          response.body.url.split('/')[response.body.url.split('/').length - 1];
+        return true;
+      });
+  });
+
+  it(`/${ROUTES.CUSTOMER} - successfull customer update (PATCH)`, () => {
+    const updateBody = {
+      name: minifaker.name(),
+      lastName: minifaker.lastName(),
+    };
+
+    return request(httpServer)
+      .patch(`/${ROUTES.CUSTOMER}/${customerCreatedId}`)
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send(updateBody)
+      .expect(200)
+      .expect((response) => {
+        expect(response.body).toEqual({
+          message: 'Customer Updated',
+          id: expect.any(Number),
+          name: updateBody.name,
+          lastName: updateBody.lastName,
+          imgUrl: expect['toBeTypeOrNull'](String),
+          updatedAt: expect.any(String),
+          type: {
+            id: expect.any(Number),
+            name: expect.any(String),
+          },
+          session: {
+            timesLoggedIn: expect.any(Number),
+            lastAccess: expect.any(String),
+            email: expect.any(String),
+          },
         });
       });
   });
