@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 import { ROUTES } from '@core/enums/routes.enum';
 import { AuthService } from '@auth/services/auth.service';
@@ -14,10 +15,10 @@ export class CustomerService {
 
   public async createCustomer(body: CreateCustomerDto) {
     const newCustomer = await this.customerRepository.createCustomer(body);
-    const { access_token, refresh_token } =
+    const { access_token, refresh_token, expirationInSeconds } =
       await this.authService.generateAccessToken({
         id: newCustomer.session.id,
-        typeId: newCustomer.session.typeId,
+        type: newCustomer.session.typeId,
       });
 
     const url = this.customerRepository.buildUrl(
@@ -30,6 +31,7 @@ export class CustomerService {
       url,
       access_token,
       refresh_token,
+      expirationInSeconds,
     };
   }
 }

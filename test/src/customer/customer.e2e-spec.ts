@@ -79,6 +79,26 @@ describe('CustomerController (e2e)', () => {
     ]);
   });
 
+  it(`/${ROUTES.CUSTOMER} - successfull customer creation (POST)`, () => {
+    return request(httpServer)
+      .post(`/${ROUTES.CUSTOMER}`)
+      .send({
+        name: minifaker.firstName(),
+        email: minifaker.email(),
+        password: '12345678',
+      })
+      .expect(201)
+      .expect((response) => {
+        expect(response.body).toEqual({
+          message: 'Customer Created',
+          url: expect.any(String),
+          access_token: expect.any(String),
+          refresh_token: expect.any(String),
+          expirationInSeconds: expect.any(Number),
+        });
+      });
+  });
+
   afterAll(async () => {
     await app.close();
   });

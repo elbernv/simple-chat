@@ -25,7 +25,7 @@ export class AuthService {
 
   public async generateAccessToken(tokenPayload: {
     id: bigint | number;
-    typeId: number;
+    type: number;
   }) {
     const accessTokenJwtid = nanoid(32);
     const accessTokenSignOptions: JwtSignOptions = {
@@ -121,7 +121,7 @@ export class AuthService {
 
       return await this.generateAccessToken({
         id: accessTokenInfo.id,
-        typeId: accessTokenInfo.type,
+        type: accessTokenInfo.type,
       });
     } catch (error) {
       throw new BadRequestException();
