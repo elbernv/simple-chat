@@ -47,6 +47,7 @@ export class AuthService {
       expirationInSeconds: parseInt(
         this.configService.get('JWT_ACCESS_TOKEN_LIFE'),
       ),
+      type: tokenPayload.type,
     };
   }
 

@@ -29,6 +29,7 @@ describe('MeController (e2e)', () => {
           access_token: expect.any(String),
           refresh_token: expect.any(String),
           expirationInSeconds: expect.any(Number),
+          type: expect.any(Number),
         });
       })
       .ok((response) => {
@@ -47,6 +48,7 @@ describe('MeController (e2e)', () => {
           access_token: expect.any(String),
           refresh_token: expect.any(String),
           expirationInSeconds: expect.any(Number),
+          type: expect.any(Number),
         });
       })
       .ok((response) => {
