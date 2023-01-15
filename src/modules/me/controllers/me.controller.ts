@@ -12,9 +12,14 @@ import { UpdateCustomerDto } from '@customer/dtos/updateCustomer.dto';
 export class MeController {
   constructor(private readonly meService: MeService) {}
 
-  @Get()
-  public async getMyInfo(@SessionInfo() sessionInfo: SessionInfoType) {
-    return await this.meService.getMyInfo(sessionInfo);
+  @Get('customer')
+  public async getCustomerMyInfo(@SessionInfo() sessionInfo: SessionInfoType) {
+    return await this.meService.getCustomerMyInfo(sessionInfo);
+  }
+
+  @Get('user')
+  public async getUserMyInfo(@SessionInfo() sessionInfo: SessionInfoType) {
+    return await this.meService.getUserMyInfo(sessionInfo);
   }
 
   @Patch('customer')
@@ -22,7 +27,6 @@ export class MeController {
     @SessionInfo() sessionInfo: SessionInfoType,
     @Body() body: UpdateCustomerDto,
   ) {
-    console.log(sessionInfo.id);
     return await this.meService.updateCustomer(sessionInfo.id, body);
   }
 }

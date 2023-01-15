@@ -1,5 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+import minifaker from 'minifaker';
+import 'minifaker/locales/en';
 
 import { configureTest, createModules } from '../../config';
 import { ROUTES } from '@core/enums/routes.enum';
@@ -57,9 +59,9 @@ describe('MeController (e2e)', () => {
       });
   });
 
-  it(`/${ROUTES.ME} - me info (customer) (POST)`, () => {
+  it(`/${ROUTES.ME} - me info (customer) (GET)`, () => {
     return request(httpServer)
-      .get(`/${ROUTES.ME}`)
+      .get(`/${ROUTES.ME}/customer`)
       .set('Authorization', `Bearer ${customerAccessToken}`)
       .expect(200)
       .expect((response) => {
@@ -82,9 +84,9 @@ describe('MeController (e2e)', () => {
       });
   });
 
-  it(`/${ROUTES.ME} - me info (user) (POST)`, () => {
+  it(`/${ROUTES.ME} - me info (user) (GET)`, () => {
     return request(httpServer)
-      .get(`/${ROUTES.ME}`)
+      .get(`/${ROUTES.ME}/user`)
       .set('Authorization', `Bearer ${userAccessToken}`)
       .expect(200)
       .expect((response) => {
@@ -92,6 +94,38 @@ describe('MeController (e2e)', () => {
           id: expect.any(Number),
           name: expect.any(String),
           lastName: expect.any(String),
+          imgUrl: expect['toBeTypeOrNull'](String),
+          updatedAt: expect.any(String),
+          type: {
+            id: expect.any(Number),
+            name: expect.any(String),
+          },
+          session: {
+            timesLoggedIn: expect.any(Number),
+            lastAccess: expect.any(String),
+            email: expect.any(String),
+          },
+        });
+      });
+  });
+
+  it(`/${ROUTES.ME} - me update (customer) (PATCH)`, () => {
+    const updateBody = {
+      name: minifaker.name(),
+      lastName: minifaker.lastName(),
+    };
+
+    return request(httpServer)
+      .patch(`/${ROUTES.ME}/customer`)
+      .send(updateBody)
+      .set('Authorization', `Bearer ${customerAccessToken}`)
+      .expect(200)
+      .expect((response) => {
+        return expect(response.body).toEqual({
+          message: 'Customer Updated',
+          id: expect.any(Number),
+          name: updateBody.name,
+          lastName: updateBody.lastName,
           imgUrl: expect['toBeTypeOrNull'](String),
           updatedAt: expect.any(String),
           type: {

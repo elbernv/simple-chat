@@ -32,7 +32,7 @@ describe('CustomerController (e2e)', () => {
           expect(response.body).toEqual({
             statusCode: 400,
             message: [
-              'name must be longer than or equal to 3 characters',
+              'name must be longer than or equal to 1 characters',
               'name must be a string',
               'email must be an email',
               'password must be a string',

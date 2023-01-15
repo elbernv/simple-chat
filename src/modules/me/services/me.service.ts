@@ -14,41 +14,42 @@ export class MeService {
     private readonly customerService: CustomerService,
   ) {}
 
-  public async getMyInfo(sessionInfo: SessionInfoType) {
-    if (sessionInfo.type === SessionTypes.USER) {
-      const userFindOptions: Prisma.userFindFirstArgs = {
-        where: { id: sessionInfo.id },
-        select: {
-          id: true,
-          name: true,
-          lastName: true,
-          imgUrl: true,
-          updatedAt: true,
-          type: { select: { id: true, name: true } },
-          session: {
-            select: { timesLoggedIn: true, lastAccess: true, email: true },
-          },
+  public async getCustomerMyInfo(sessionInfo: SessionInfoType) {
+    const customerFindOptions: Prisma.customerFindFirstArgs = {
+      where: { id: sessionInfo.id },
+      select: {
+        id: true,
+        name: true,
+        lastName: true,
+        imgUrl: true,
+        updatedAt: true,
+        type: { select: { id: true, name: true } },
+        session: {
+          select: { timesLoggedIn: true, lastAccess: true, email: true },
         },
-      };
+      },
+    };
 
-      return this.meRepository.findOneUser(userFindOptions);
-    } else {
-      const customerFindOptions: Prisma.customerFindFirstArgs = {
-        where: { id: sessionInfo.id },
-        select: {
-          id: true,
-          name: true,
-          lastName: true,
-          imgUrl: true,
-          updatedAt: true,
-          type: { select: { id: true, name: true } },
-          session: {
-            select: { timesLoggedIn: true, lastAccess: true, email: true },
-          },
+    return this.meRepository.findOneCustomer(customerFindOptions);
+  }
+
+  public async getUserMyInfo(sessionInfo: SessionInfoType) {
+    const userFindOptions: Prisma.userFindFirstArgs = {
+      where: { id: sessionInfo.id },
+      select: {
+        id: true,
+        name: true,
+        lastName: true,
+        imgUrl: true,
+        updatedAt: true,
+        type: { select: { id: true, name: true } },
+        session: {
+          select: { timesLoggedIn: true, lastAccess: true, email: true },
         },
-      };
-      return this.meRepository.findOneCustomer(customerFindOptions);
-    }
+      },
+    };
+
+    return this.meRepository.findOneUser(userFindOptions);
   }
 
   public async updateCustomer(id: number, body: UpdateCustomerDto) {
