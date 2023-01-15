@@ -13,6 +13,7 @@ import { differenceInSeconds } from 'date-fns';
 
 import { SessionInfoType } from '@core/types/sessionInfo.type';
 import { AuthRepository } from '@auth/repositories/auth.repositories';
+import { SessionTypes } from '@core/enums/sessionTypes.enum';
 
 @Injectable()
 export class AuthService {
@@ -73,8 +74,13 @@ export class AuthService {
       return false;
     }
 
+    const id =
+      sessionInfo.typeId === SessionTypes.CUSTOMER
+        ? sessionInfo.customer.id
+        : sessionInfo.user.id;
+
     return {
-      id: sessionInfo.id,
+      id,
       type: sessionInfo.typeId,
     };
   }

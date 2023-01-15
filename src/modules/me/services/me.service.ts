@@ -4,15 +4,20 @@ import { Injectable } from '@nestjs/common';
 import { SessionInfoType } from '@core/types/sessionInfo.type';
 import { SessionTypes } from '@core/enums/sessionTypes.enum';
 import { MeRepository } from '@me/repositories/me.repository';
+import { CustomerService } from '@customer/services/customer.service';
+import { UpdateCustomerDto } from '@customer/dtos/updateCustomer.dto';
 
 @Injectable()
 export class MeService {
-  constructor(private readonly meRepository: MeRepository) {}
+  constructor(
+    private readonly meRepository: MeRepository,
+    private readonly customerService: CustomerService,
+  ) {}
 
   public async getMyInfo(sessionInfo: SessionInfoType) {
     if (sessionInfo.type === SessionTypes.USER) {
       const userFindOptions: Prisma.userFindFirstArgs = {
-        where: { session: { id: sessionInfo.id } },
+        where: { id: sessionInfo.id },
         select: {
           id: true,
           name: true,
@@ -29,7 +34,7 @@ export class MeService {
       return this.meRepository.findOneUser(userFindOptions);
     } else {
       const customerFindOptions: Prisma.customerFindFirstArgs = {
-        where: { session: { id: sessionInfo.id } },
+        where: { id: sessionInfo.id },
         select: {
           id: true,
           name: true,
@@ -44,5 +49,9 @@ export class MeService {
       };
       return this.meRepository.findOneCustomer(customerFindOptions);
     }
+  }
+
+  public async updateCustomer(id: number, body: UpdateCustomerDto) {
+    return this.customerService.updateCustomer(id, body);
   }
 }

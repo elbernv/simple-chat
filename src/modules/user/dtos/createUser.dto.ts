@@ -10,7 +10,7 @@ import {
 import { hashSync } from 'bcrypt';
 import { BadRequestException } from '@nestjs/common';
 
-const passwordValidation = ({ value }) => {
+export const passwordValidation = ({ value }) => {
   if (!minLength(value, 8)) {
     throw new BadRequestException([
       'password must be longer than or equal to 8 characters',

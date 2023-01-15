@@ -14,6 +14,8 @@ export class AuthRepository {
         email: true,
         password: true,
         typeId: true,
+        customer: { select: { id: true } },
+        user: { select: { id: true } },
       },
     });
 
