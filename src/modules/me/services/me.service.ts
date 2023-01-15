@@ -2,7 +2,6 @@ import { Prisma } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
 
 import { SessionInfoType } from '@core/types/sessionInfo.type';
-import { SessionTypes } from '@core/enums/sessionTypes.enum';
 import { MeRepository } from '@me/repositories/me.repository';
 import { CustomerService } from '@customer/services/customer.service';
 import { UpdateCustomerDto } from '@customer/dtos/updateCustomer.dto';

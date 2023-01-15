@@ -73,6 +73,7 @@ async function usersData(prisma: PrismaType) {
     data: {
       name: 'user',
       lastName: 'test',
+      imgUrl: 'generic-user.jpg',
       session: {
         create: {
           email: 'user@test.com',
@@ -123,6 +124,7 @@ async function customersData(prisma: PrismaType) {
     data: {
       name: 'customer',
       lastName: 'test',
+      imgUrl: 'generic-user.jpg',
       session: {
         create: {
           email: 'customer@test.com',
