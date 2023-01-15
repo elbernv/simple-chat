@@ -28,9 +28,9 @@ function configureOpenApi(app: NestExpressApplication): { url: string } {
     .addBearerAuth({
       flows: {
         password: {
-          tokenUrl: 'http://localhost:7015/auth/login',
+          tokenUrl: 'http://0.0.0.0:7015/auth/login',
           scopes: {},
-          authorizationUrl: 'http://localhost:7015/auth/login',
+          authorizationUrl: 'http://0.0.0.0:7015/auth/login',
         },
       },
       type: 'oauth2',

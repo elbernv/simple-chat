@@ -23,7 +23,7 @@ export const passwordValidation = ({ value }) => {
 export class CreateUserDto {
   @ApiProperty()
   @IsString()
-  @MinLength(3)
+  @MinLength(1)
   name: string;
 
   @ApiProperty()

@@ -6,13 +6,14 @@ import { passwordValidation } from '@user/dtos/createUser.dto';
 export class UpdateCustomerDto {
   @ApiPropertyOptional()
   @IsString()
-  @MinLength(3)
+  @MinLength(1)
   @IsOptional()
   name?: string;
 
   @ApiPropertyOptional()
   @IsString()
   @IsOptional()
+  @MinLength(1)
   lastName?: string;
 
   @ApiPropertyOptional()
