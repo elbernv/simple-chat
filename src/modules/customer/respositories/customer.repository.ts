@@ -75,6 +75,7 @@ export class CustomerRepository {
         data: {
           ...(body.name && { name: body.name }),
           ...(body.lastName && { lastName: body.lastName }),
+          ...(body.imgUrl && { imgUrl: body.imgUrl }),
           ...(body.password && {
             session: { update: { password: body.password } },
           }),

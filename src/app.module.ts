@@ -6,6 +6,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
+import { ImagesModule } from '@core/images/images.module';
 import { PrismaModule } from '@core/prisma/prisma.module';
 import { AuthModule } from '@auth/auth.module';
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
@@ -33,6 +34,7 @@ import { MeModule } from '@me/me.module';
     UserModule,
     CustomerModule,
     MeModule,
+    ImagesModule,
   ],
   controllers: [AppController],
   providers: [

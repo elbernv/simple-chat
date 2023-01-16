@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -42,7 +43,10 @@ export class MeController {
 
   @Post('customer/picture')
   @UseInterceptors(FileInterceptor('picture', { fileFilter: imageFileFilter }))
-  public async saveCustomerPicture(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
+  public async saveCustomerPicture(
+    @UploadedFile() file: Express.Multer.File,
+    @SessionInfo() sessionInfo: SessionInfoType,
+  ) {
+    return this.meService.saveCustomerPicture(file, sessionInfo);
   }
 }

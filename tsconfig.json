@@ -19,6 +19,7 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@core/*": ["src/core/*"],
+      "@images/*": ["src/core/images/*"],
       "@utils/*": ["src/utils/*"],
       "@auth/*": ["src/modules/auth/*"],
       "@user/*": ["src/modules/user/*"],

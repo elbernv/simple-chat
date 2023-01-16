@@ -21,4 +21,6 @@ export class UpdateCustomerDto {
   @IsOptional()
   @Transform(passwordValidation)
   password?: string;
+
+  imgUrl?: string;
 }
