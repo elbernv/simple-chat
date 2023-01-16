@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   Patch,
   Post,
@@ -48,5 +49,12 @@ export class MeController {
     @SessionInfo() sessionInfo: SessionInfoType,
   ) {
     return this.meService.saveCustomerPicture(file, sessionInfo);
+  }
+
+  @Delete('customer/picture')
+  public async deleteCustomerPicture(
+    @SessionInfo() sessionInfo: SessionInfoType,
+  ) {
+    return this.meService.deleteCustomerPicture(sessionInfo);
   }
 }

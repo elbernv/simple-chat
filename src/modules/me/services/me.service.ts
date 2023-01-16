@@ -70,4 +70,19 @@ export class MeService {
 
     return { message: 'Picture updated', url: imageUrl };
   }
+
+  public async deleteCustomerPicture(sessionInfo: SessionInfoType) {
+    const body = { imgUrl: 'generic-user.jpg' };
+
+    const updatedCustomer = await this.customerService.updateCustomer(
+      sessionInfo.id,
+      body,
+    );
+
+    const imageUrl = `${this.configService.get('BASE_URL')}/customers/picture/${
+      updatedCustomer.imgUrl
+    }`;
+
+    return { message: 'Picture deleted', url: imageUrl };
+  }
 }
