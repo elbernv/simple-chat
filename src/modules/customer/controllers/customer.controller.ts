@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   Response,
   StreamableFile,
 } from '@nestjs/common';
@@ -18,6 +19,7 @@ import { Public } from '@auth/decorators/public.decorator';
 import { CreateCustomerDto } from '@customer/dtos/createCustomer.dto';
 import { CustomerService } from '@customer/services/customer.service';
 import { UpdateCustomerDto } from '@customer/dtos/updateCustomer.dto';
+import { AllCustomerQuery } from '@customer/dtos/allCustomersQuery';
 
 @ApiTags(ROUTES.CUSTOMER.toUpperCase())
 @Controller(ROUTES.CUSTOMER)
@@ -45,5 +47,10 @@ export class CustomerController {
     @Param('name') name: string,
   ): Promise<StreamableFile | BadRequestException> {
     return this.customerService.servePicture(response, name);
+  }
+
+  @Get()
+  public async getAllCustomers(@Query() queryParams: AllCustomerQuery) {
+    return this.customerService.getAllCustomers(queryParams);
   }
 }

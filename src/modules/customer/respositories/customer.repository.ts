@@ -10,6 +10,8 @@ import { PrismaService } from '@core/prisma/services/prisma.service';
 import { CreateCustomerDto } from '@customer/dtos/createCustomer.dto';
 import { CustomerStatus, CustomerTypes } from '@customer/enums/customer.enums';
 import { UpdateCustomerDto } from '@customer/dtos/updateCustomer.dto';
+import { Prisma } from '@prisma/client';
+import { customer } from '@customer/types/customer.types';
 
 @Injectable()
 export class CustomerRepository {
@@ -88,5 +90,21 @@ export class CustomerRepository {
         'an error occurred updating the customer',
       );
     }
+  }
+
+  public async findManyCustomers(
+    findOptions: Prisma.customerFindManyArgs,
+    paginated: boolean = true,
+  ) {
+    if (!paginated) return this.prismaService.customer.findMany(findOptions);
+
+    const model: any = this.prismaService.customer;
+    const resourceUrl = 'customers';
+    const paginateSearch = this.prismaService.paginatedSearch<
+      customer,
+      Prisma.customerFindManyArgs
+    >(model, findOptions, resourceUrl);
+
+    return paginateSearch;
   }
 }

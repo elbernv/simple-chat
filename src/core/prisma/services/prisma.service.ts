@@ -49,13 +49,12 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
       count: (args: any) => PrismaPromise<number>;
       findMany: (args: any) => PrismaPromise<T[]>;
     },
-    args: { where?: any; take?: number } & K,
+    args: { where?: any; take?: number; skip?: number } & K,
     resourceUrl: string,
-    page: number,
   ): Promise<PaginatedResult<T>> {
     const configService = new ConfigService();
     const limit = args?.take || 10;
-    const skip = page > 0 ? limit * (page - 1) : 0;
+    const skip = args.skip > 0 ? limit * (args.skip - 1) : 0;
     const [totalItems, data] = await Promise.all([
       model.count({ where: args.where }),
       model.findMany({
@@ -69,8 +68,9 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
       'BASE_URL',
     )}${resourceUrl}?`;
     const lastPageNumber: number = Math.ceil(totalItems / limit);
-    const nextPageNumber: number = page < lastPageNumber ? page + 1 : null;
-    const previosPageNumber: number = page > 1 ? page - 1 : null;
+    const nextPageNumber: number =
+      args.skip < lastPageNumber ? args.skip + 1 : null;
+    const previosPageNumber: number = args.skip > 1 ? args.skip - 1 : null;
     const lastPageUrl: string = `${baseUrl}limit=${limit}&page=${lastPageNumber}`;
     const nextPageUrl: string =
       (nextPageNumber && `${baseUrl}limit=${limit}&page=${nextPageNumber}`) ||
@@ -85,7 +85,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
       data,
       meta: {
         totalItems,
-        page,
+        page: args.skip,
         limit,
         previousPageUrl,
         nextPageUrl,
