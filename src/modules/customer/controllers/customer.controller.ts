@@ -53,4 +53,9 @@ export class CustomerController {
   public async getAllCustomers(@Query() queryParams: AllCustomerQuery) {
     return this.customerService.getAllCustomers(queryParams);
   }
+
+  @Get(':id')
+  public async getCustomerById(@Param('id', ParseIntPipe) id: number) {
+    return this.customerService.getCustomerById(id);
+  }
 }

@@ -13,6 +13,7 @@ import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 import { UserModule } from '@user/user.module';
 import { CustomerModule } from '@customer/customer.module';
 import { MeModule } from '@me/me.module';
+import { ChatModule } from './modules/chat/chat.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { MeModule } from '@me/me.module';
     CustomerModule,
     MeModule,
     ImagesModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [

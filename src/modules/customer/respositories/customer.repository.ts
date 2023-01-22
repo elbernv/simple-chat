@@ -108,4 +108,8 @@ export class CustomerRepository {
 
     return paginateSearch;
   }
+
+  public async findFirst(findOptions: Prisma.customerFindFirstArgs) {
+    return this.prismaService.customer.findFirst(findOptions);
+  }
 }

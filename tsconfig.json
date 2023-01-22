@@ -24,7 +24,8 @@
       "@auth/*": ["src/modules/auth/*"],
       "@user/*": ["src/modules/user/*"],
       "@customer/*": ["src/modules/customer/*"],
-      "@me/*": ["src/modules/me/*"]
+      "@me/*": ["src/modules/me/*"],
+      "@chat/*": ["src/modules/chat/*"]
     }
   }
 }

@@ -88,4 +88,17 @@ export class CustomerService {
 
     return finalResponse;
   }
+
+  public async getCustomerById(id: number) {
+    const findOptions: Prisma.customerFindFirstArgs = {
+      where: { id },
+      select: customerFields,
+    };
+
+    const customer: customer = (await this.customerRepository.findFirst(
+      findOptions,
+    )) as customer;
+
+    return this.customerSerializer.serializeOneCustomer(customer);
+  }
 }

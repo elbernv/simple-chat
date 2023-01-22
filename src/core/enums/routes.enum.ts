@@ -8,4 +8,5 @@ export enum ROUTES {
   USER = 'users',
   CUSTOMER = 'customers',
   ME = 'me',
+  CHAT = 'chat',
 }

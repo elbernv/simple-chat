@@ -83,6 +83,10 @@ model customer {
 
   type   customer_type @relation(fields: [typeId], references: [id])
   typeId Int           @db.SmallInt
+
+  messagesReceives messages[] @relation("customerReceiver")
+
+  messagesSent messages[] @relation("customerSender")
 }
 
 model customer_status {
@@ -99,4 +103,17 @@ model customer_type {
   description String? @db.VarChar(512)
 
   customers customer[]
+}
+
+model messages {
+  id       BigInt    @id @default(autoincrement()) @db.BigInt
+  message  String    @db.VarChar(51200)
+  sentDate DateTime  @default(now()) @db.Timestamptz(3)
+  readDate DateTime? @db.Timestamptz(3)
+
+  customerReceiver   customer @relation("customerReceiver", fields: [customerReceiverId], references: [id])
+  customerReceiverId BigInt
+
+  customerSender   customer @relation("customerSender", fields: [customerSenderId], references: [id])
+  customerSenderId BigInt
 }
