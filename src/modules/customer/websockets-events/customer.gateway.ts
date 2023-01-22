@@ -1,40 +1,62 @@
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import {
-  MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
-  SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-  WsResponse,
 } from '@nestjs/websockets';
-import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway(7016, {
   cors: true,
 })
+@Injectable()
 export class CustomerEventsGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {}
+
   @WebSocketServer()
   server: Server;
   private activeCustomers: Array<number> = [];
 
   handleConnection(client: Socket) {
-    this.addToActiveCustomers(client.handshake.query.id as string);
-    this.server.emit('active-users', this.activeCustomers);
+    try {
+      const token = this.jwtService.verify(
+        client.handshake.query.token as string,
+        {
+          secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+        },
+      );
+
+      this.addToActiveCustomers(token.id);
+      this.server.emit('active-users', this.activeCustomers);
+    } catch (error) {}
   }
 
   handleDisconnect(client: Socket) {
-    this.deleteFromActiveCustomers(client.handshake.query.id as string);
-    console.log(client.handshake.query.id);
+    try {
+      const token = this.jwtService.verify(
+        client.handshake.query.token as string,
+        {
+          secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+        },
+      );
+
+      this.deleteFromActiveCustomers(token.id);
+      this.server.emit('mark-user-as-offline', token.id);
+    } catch (error) {}
   }
 
-  private addToActiveCustomers(customerId: string) {
+  private addToActiveCustomers(customerId: number) {
     if (!customerId) return;
 
-    this.activeCustomers.push(parseInt(customerId));
+    this.activeCustomers.push(customerId);
   }
 
   private deleteFromActiveCustomers(customerId: string) {
@@ -42,16 +64,4 @@ export class CustomerEventsGateway
       (id) => id !== parseInt(customerId),
     );
   }
-
-  // @SubscribeMessage('events')
-  // findAll(@MessageBody() data: any): Observable<WsResponse<number>> {
-  //   return from([1, 2, 3]).pipe(
-  //     map((item) => ({ event: 'events', data: item })),
-  //   );
-  // }
-
-  // @SubscribeMessage('identity')
-  // async identity(@MessageBody() data: number): Promise<number> {
-  //   return data;
-  // }
 }

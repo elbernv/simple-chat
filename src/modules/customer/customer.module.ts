@@ -7,9 +7,10 @@ import { CustomerService } from '@customer/services/customer.service';
 import { CustomerRepository } from '@customer/respositories/customer.repository';
 import { CustomerSerializer } from '@customer/serializer/customer.serializer';
 import { CustomerEventsGateway } from '@customer/websockets-events/customer.gateway';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [AuthModule, ImagesModule],
+  imports: [JwtModule.register({}), AuthModule, ImagesModule],
   controllers: [CustomerController],
   providers: [
     CustomerService,
