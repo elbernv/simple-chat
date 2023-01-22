@@ -28,7 +28,7 @@ export class CustomerService {
     const newCustomer = await this.customerRepository.createCustomer(body);
     const { access_token, refresh_token, expirationInSeconds } =
       await this.authService.generateAccessToken({
-        id: newCustomer.session.id,
+        id: newCustomer.id,
         type: newCustomer.session.typeId,
       });
 

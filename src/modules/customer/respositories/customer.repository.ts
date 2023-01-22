@@ -34,6 +34,7 @@ export class CustomerRepository {
         },
         data: {
           name: body.name,
+          imgUrl: 'generic-user.jpg',
           ...(body.lastName && { lastName: body.lastName }),
           session: {
             create: {
@@ -54,7 +55,7 @@ export class CustomerRepository {
       this.logger.error(error);
 
       throw new InternalServerErrorException(
-        'an error occurred creating the customer',
+        'an error occurred creating the customer, please try again later',
       );
     }
   }
