@@ -112,4 +112,20 @@ export class CustomerRepository {
   public async findFirst(findOptions: Prisma.customerFindFirstArgs) {
     return this.prismaService.customer.findFirst(findOptions);
   }
+
+  public async createMessage(data: {
+    message: string;
+    senderId: number;
+    receiverId: number;
+    sentDate: string;
+  }) {
+    return await this.prismaService.messages.create({
+      data: {
+        customerReceiver: { connect: { id: data.receiverId } },
+        customerSender: { connect: { id: data.senderId } },
+        message: data.message,
+        sentDate: data.sentDate,
+      },
+    });
+  }
 }
